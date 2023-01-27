@@ -1,0 +1,171 @@
+Microsoft Windows [Version 10.0.22000.978]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\HP>docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+C:\Users\HP>docker images
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+
+C:\Users\HP>docker pull postgress:12-alpine
+Error response from daemon: pull access denied for postgress, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+
+C:\Users\HP>docker pull postgres:12-alpine
+12-alpine: Pulling from library/postgres
+213ec9aee27d: Pull complete
+85c3ef7cf9a6: Pull complete
+ac29cc04759a: Pull complete
+563d10e07bd1: Pull complete
+5a08087803d4: Pull complete
+e156d6e93944: Pull complete
+4cdc78c6909c: Pull complete
+7a3361fe23fd: Pull complete
+Digest: sha256:55fb7ba926381c2ac1f8f58bb181dd932f140aa467c3097a07c6815648dbc5e2
+Status: Downloaded newer image for postgres:12-alpine
+docker.io/library/postgres:12-alpine
+
+C:\Users\HP>docker images
+REPOSITORY   TAG         IMAGE ID       CREATED       SIZE
+postgres     12-alpine   1ace9f47704c   5 weeks ago   211MB
+
+C:\Users\HP>docker run --name postgres12 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:12-alpine
+190894846a76ea64afd5272b9c188134a9b773685c46aa9c4b9660c25bcd641c
+
+C:\Users\HP>docker ps
+CONTAINER ID   IMAGE                COMMAND                  CREATED          STATUS          PORTS                    NAMES
+190894846a76   postgres:12-alpine   "docker-entrypoint.s…"   18 seconds ago   Up 17 seconds   0.0.0.0:5432->5432/tcp   postgres12
+
+C:\Users\HP>docker images
+REPOSITORY   TAG         IMAGE ID       CREATED       SIZE
+postgres     12-alpine   1ace9f47704c   5 weeks ago   211MB
+
+C:\Users\HP>docker exec -it postgres12 psql -U root
+psql (12.12)
+Type "help" for help.
+
+root=# select now();
+              now
+-------------------------------
+ 2022-09-18 17:19:11.729324+00
+(1 row)
+
+root=# select now()
+root-# ;
+              now
+-------------------------------
+ 2022-09-18 17:19:16.970198+00
+(1 row)
+
+root=# select now();
+              now
+-------------------------------
+ 2022-09-18 17:19:20.495741+00
+(1 row)
+
+root=# select now();
+              now
+-------------------------------
+ 2022-09-18 17:19:24.084622+00
+(1 row)
+
+root=# \q
+
+C:\Users\HP>docker logs postgres12
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "en_US.utf8".
+The default database encoding has accordingly been set to "UTF8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgresql/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... UTC
+creating configuration files ... ok
+running bootstrap script ... ok
+sh: locale: not found
+2022-09-18 17:16:47.841 UTC [31] WARNING:  no usable system locales were found
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgresql/data -l logfile start
+
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+waiting for server to start....2022-09-18 17:16:48.360 UTC [37] LOG:  starting PostgreSQL 12.12 on x86_64-pc-linux-musl, compiled by gcc (Alpine 11.2.1_git20220219) 11.2.1 20220219, 64-bit
+2022-09-18 17:16:48.362 UTC [37] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-09-18 17:16:48.376 UTC [38] LOG:  database system was shut down at 2022-09-18 17:16:48 UTC
+2022-09-18 17:16:48.380 UTC [37] LOG:  database system is ready to accept connections
+ done
+server started
+CREATE DATABASE
+
+
+/usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+
+waiting for server to shut down...2022-09-18 17:16:48.565 UTC [37] LOG:  received fast shutdown request
+.2022-09-18 17:16:48.566 UTC [37] LOG:  aborting any active transactions
+2022-09-18 17:16:48.566 UTC [37] LOG:  background worker "logical replication launcher" (PID 44) exited with exit code 1
+2022-09-18 17:16:48.566 UTC [39] LOG:  shutting down
+2022-09-18 17:16:48.578 UTC [37] LOG:  database system is shut down
+ done
+server stopped
+
+PostgreSQL init process complete; ready for start up.
+
+2022-09-18 17:16:48.674 UTC [1] LOG:  starting PostgreSQL 12.12 on x86_64-pc-linux-musl, compiled by gcc (Alpine 11.2.1_git20220219) 11.2.1 20220219, 64-bit
+2022-09-18 17:16:48.674 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2022-09-18 17:16:48.674 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2022-09-18 17:16:48.679 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-09-18 17:16:48.691 UTC [51] LOG:  database system was shut down at 2022-09-18 17:16:48 UTC
+2022-09-18 17:16:48.695 UTC [1] LOG:  database system is ready to accept connections
+
+C:\Users\HP>
+
+
+
+1. kill all services running on port 5432 and then run container
+2. Database migration: PS C:\Important Files\Backend Go> migrate -path db/migration -database "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable" -verbose up               
+
+
+
+
+go mod init github.com/
+go mod tidy
+
+
+docker run --rm -v "%cd%:/src" -w /src kjconroy/sqlc generate
+
+
+
+
+
+
+
+
+
+
+MySQL has 4 types of isolation level, PostgreSQL has 3 (Dirty read and read uncommitable are similar in PostgreSQL)
+MySQL using locking mechanism to prevent read conflicts while PostgreSQL uses dependency detection to do the same
+
+
+
+
+
+
+
+
+
+
+
+
+
