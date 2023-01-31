@@ -56,7 +56,7 @@ func TestTransferTx(t *testing.T) {
 		require.NotZero(t, transfer.ID)
 		require.NotZero(t, transfer.CreatedAt)
 
-		_, err = store.Queries.GetTransfer(context.Background(), transfer.ID)
+		_, err = store.GetTransfer(context.Background(), transfer.ID)
 
 		require.NoError(t, err)
 
@@ -68,7 +68,7 @@ func TestTransferTx(t *testing.T) {
 		require.NotZero(t, fromEntry.ID)
 		require.NotZero(t, fromEntry.CreatedAt)
 
-		_, err = store.Queries.GetEntry(context.Background(), fromEntry.ID)
+		_, err = store.GetEntry(context.Background(), fromEntry.ID)
 		require.NoError(t, err)
 
 		toEntry := result.ToEntry
@@ -78,7 +78,7 @@ func TestTransferTx(t *testing.T) {
 		require.NotZero(t, toEntry.ID)
 		require.NotZero(t, toEntry.CreatedAt)
 
-		_, err = store.Queries.GetEntry(context.Background(), toEntry.ID)
+		_, err = store.GetEntry(context.Background(), toEntry.ID)
 		require.NoError(t, err)
 
 		// check accounts
@@ -107,10 +107,10 @@ func TestTransferTx(t *testing.T) {
 	}
 
 	// check the final balance
-	updatedFromAccount, err := store.Queries.GetAccount(context.Background(), fromAccount.ID)
+	updatedFromAccount, err := store.GetAccount(context.Background(), fromAccount.ID)
 	require.NoError(t, err)
 
-	updatedToAccount, err := store.Queries.GetAccount(context.Background(), toAccount.ID)
+	updatedToAccount, err := store.GetAccount(context.Background(), toAccount.ID)
 	require.NoError(t, err)
 
 	fmt.Println("After balance formAccount:", updatedFromAccount.Balance, " toAccount:", updatedToAccount.Balance)
@@ -161,10 +161,10 @@ func TestTransferTxDeadlock(t *testing.T) {
 	}
 
 	// check the final balance
-	updatedFromAccount, err := store.Queries.GetAccount(context.Background(), fromAccount.ID)
+	updatedFromAccount, err := store.GetAccount(context.Background(), fromAccount.ID)
 	require.NoError(t, err)
 
-	updatedToAccount, err := store.Queries.GetAccount(context.Background(), toAccount.ID)
+	updatedToAccount, err := store.GetAccount(context.Background(), toAccount.ID)
 	require.NoError(t, err)
 
 	fmt.Println("After balance formAccount:", updatedFromAccount.Balance, " toAccount:", updatedToAccount.Balance)

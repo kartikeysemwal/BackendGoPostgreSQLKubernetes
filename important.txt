@@ -145,6 +145,8 @@ go mod tidy
 
 docker run --rm -v "%cd%:/src" -w /src kjconroy/sqlc generate
 
+migrate create -ext sql -dir db/migration -seq add_users
+
 
 
 
