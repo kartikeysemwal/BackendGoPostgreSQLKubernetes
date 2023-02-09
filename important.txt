@@ -151,11 +151,6 @@ migrate create -ext sql -dir db/migration -seq add_users
 
 
 
-
-
-
-
-
 MySQL has 4 types of isolation level, PostgreSQL has 3 (Dirty read and read uncommitable are similar in PostgreSQL)
 MySQL using locking mechanism to prevent read conflicts while PostgreSQL uses dependency detection to do the same
 
@@ -163,6 +158,30 @@ MySQL using locking mechanism to prevent read conflicts while PostgreSQL uses de
 
 
 
+docker build -t golang:latest .
+docker rmi <image>
+docker images
+docker ps
+docker run --name golang -p 8080:8080 -e GIN_MODE=release golang:latest
+docker container inspect golang
+
+
+change the localhost IP, according to the IP it is currently running on, check it using "docker container inspect <container_name>"
+docker run --name golang -p 8080:8080 -e GIN_MODE=release -e DB_SOURCE="postgresql://root:secret@172.17.0.2:5432/simple_bank?sslmode=disable" golang:latest
+
+
+docker rm golang
+
+docker network ls
+docker network inspect bridge
+
+create network and setup both backend and db on same network
+
+
+docker network create test-network
+docker network connect test-network postgres12
+
+docker run --name golang --network test-network -p 8080:8080 -e GIN_MODE=release -e DB_SOURCE="postgresql://root:secret@postgres12:5432/simple_bank?sslmode=disable" golang:latest
 
 
 
