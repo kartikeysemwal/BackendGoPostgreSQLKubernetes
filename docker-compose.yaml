@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  postgres:
+  postgres12:
     image: postgres:12-alpine
     environment:
       - POSTGRES_USER=root
@@ -14,3 +14,7 @@ services:
       - "8080:8080"
     environment:
       - DB_SOURCE=postgresql://root:secret@postgres12:5432/simple_bank?sslmode=disable
+    depends_on:
+      - postgres12
+    entrypoint: ["/app/wait-for.sh", "postgres12:5432", "--", "/app/start.sh"]
+    command: ["/app/main"]
