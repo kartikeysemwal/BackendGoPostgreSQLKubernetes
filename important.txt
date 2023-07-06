@@ -181,7 +181,7 @@ create network and setup both backend and db on same network
 docker network create test-network
 docker network connect test-network postgres12
 
-docker run --name golang --network test-network -p 8080:8080 -e GIN_MODE=release -e DB_SOURCE="postgresql://root:secret@postgres12:5432/simple_bank?sslmode=disable" golang:latest
+docker run --name simple_bank --network test-network -p 8080:8080 -e GIN_MODE=release -e DB_SOURCE="postgresql://root:secret@postgres12:5432/simple_bank?sslmode=disable" simple_bank:latest
 
 
 
@@ -199,7 +199,7 @@ How to start server:
 
 
 
-
+docker build -t simple_bank:latest .
 
 
 
