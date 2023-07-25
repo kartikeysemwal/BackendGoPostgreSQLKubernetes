@@ -37,4 +37,7 @@ server:
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/kartikeysemwal/goLangBackend/db/sqlc Store
 
-.PHONY: postgres simple_bank createdb dropdb migrateup migrateup1 migratedown migratedown1 sqlc test server mock
+network:
+	docker network create test-network
+
+.PHONY: postgres simple_bank createdb dropdb migrateup migrateup1 migratedown migratedown1 sqlc test server mock network
