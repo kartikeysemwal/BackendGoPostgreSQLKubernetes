@@ -196,15 +196,17 @@ How to start server:
 
 
 
-
-
-
 docker build -t simple_bank:latest .
 
 
 
 
-
+first run make 
+network, 
+createdb, 
+postgres, 
+docker build -t simple_bank:latest .
+simple_bank
 
 
 
